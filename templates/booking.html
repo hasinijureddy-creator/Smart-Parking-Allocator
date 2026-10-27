@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart Parking Allocator</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#050b14;
+    color:white;
+    min-height:100vh;
+}
+
+header{
+    height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
+    background:#081321;
+    border-bottom:1px solid #1d334c;
+}
+
+.logo{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#00d9ff;
+}
+
+nav{
+    display:flex;
+    gap:20px;
+}
+
+nav a{
+    color:#9baabd;
+    text-decoration:none;
+    font-size:13px;
+}
+
+nav a:hover{
+    color:white;
+}
+
+main{
+    width:94%;
+    max-width:1400px;
+    margin:35px auto;
+}
+
+.title{
+    margin-bottom:25px;
+}
+
+.title small{
+    color:#00d9ff;
+    letter-spacing:3px;
+}
+
+.title h1{
+    font-size:42px;
+    margin-top:8px;
+}
+
+.title h1 span{
+    color:#8b63ff;
+}
+
+.title p{
+    color:#8291a5;
+    margin-top:8px;
+}
+
+.stats{
+    display:flex;
+    gap:15px;
+    margin-bottom:25px;
+    flex-wrap:wrap;
+}
+
+.stat{
+    background:#0b1726;
+    border:1px solid #20364d;
+    border-radius:15px;
+    padding:15px 25px;
+    min-width:150px;
+}
+
+.stat small{
+    color:#7e8da1;
+}
+
+.stat strong{
+    display:block;
+    font-size:25px;
+    margin-top:5px;
+}
+
+.available{
+    color:#36e59a;
+}
+
+.booked{
+    color:#48b7ff;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:1fr 340px;
+    gap:22px;
+}
+
+.card{
+    background:#0b1726;
+    border:1px solid #20364d;
+    border-radius:22px;
+    padding:25px;
+}
+
+.card h2{
+    margin-bottom:18px;
+}
+
+.zones{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.zone{
+    flex:1;
+    padding:14px;
+    border-radius:12px;
+    border:1px solid #29415b;
+    background:#07111d;
+    color:#9baabd;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.zone.active{
+    background:linear-gradient(135deg,#00aeda,#704cff);
+    color:white;
+}
+
+.parking{
+    background:#050d17;
+    border:1px solid #1b3047;
+    border-radius:18px;
+    padding:20px;
+}
+
+.entrance{
+    text-align:center;
+    padding:12px;
+    border-radius:10px;
+    background:#092337;
+    color:#4fdcff;
+    margin-bottom:20px;
+}
+
+.slot-grid{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:12px;
+}
+
+.slot{
+    min-height:80px;
+    border-radius:13px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+}
+
+.slot strong{
+    font-size:16px;
+}
+
+.slot small{
+    font-size:9px;
+    letter-spacing:1px;
+}
+
+.slot.available{
+    background:rgba(45,225,150,.1);
+    border:1px solid #27d98e;
+    color:#38e59b;
+}
+
+.slot.available:hover{
+    transform:translateY(-5px);
+    background:rgba(45,225,150,.25);
+    box-shadow:0 10px 30px rgba(45,225,150,.2);
+}
+
+.slot.occupied{
+    background:rgba(255,70,90,.1);
+    border:1px solid #71323d;
+    color:#ff6475;
+    cursor:not-allowed;
+}
+
+.slot.booked{
+    background:rgba(60,170,255,.12);
+    border:1px solid #285b80;
+    color:#4db8ff;
+    cursor:not-allowed;
+}
+
+.slot.selected{
+    background:linear-gradient(135deg,#704cff,#b34fff);
+    border:2px solid #c4a9ff;
+    color:white;
+    transform:translateY(-5px);
+}
+
+.booking{
+    background:linear-gradient(145deg,#101e31,#08121f);
+}
+
+.selected{
+    text-align:center;
+}
+
+.selected small{
+    color:#77889d;
+    letter-spacing:2px;
+}
+
+.selected h1{
+    color:#52ddff;
+    font-size:38px;
+    margin:10px;
+}
+
+label{
+    display:block;
+    color:#91a0b3;
+    font-size:11px;
+    margin:20px 0 7px;
+}
+
+input,
+select{
+    width:100%;
+    padding:13px;
+    background:#07111e;
+    border:1px solid #29415b;
+    border-radius:10px;
+    color:white;
+    outline:none;
+}
+
+input:focus,
+select:focus{
+    border-color:#00d9ff;
+}
+
+#bookButton{
+    width:100%;
+    margin-top:22px;
+    padding:15px;
+    border:0;
+    border-radius:12px;
+    color:white;
+    font-weight:bold;
+    background:linear-gradient(135deg,#00bde9,#704cff);
+    cursor:pointer;
+}
+
+#bookButton:disabled{
+    opacity:.4;
+    cursor:not-allowed;
+}
+
+.message{
+    margin-top:15px;
+    text-align:center;
+    color:#74869b;
+    font-size:12px;
+}
+
+@media(max-width:900px){
+
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    nav{
+        display:none;
+    }
+
+    .slot-grid{
+        grid-template-columns:repeat(4,1fr);
+    }
+
+}
+
+@media(max-width:550px){
+
+    .slot-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<header>
+
+<div class="logo">
+🚗 Smart <span>Parking</span>
+</div>
+
+<nav>
+
+<a href="/">Home</a>
+<a href="/parking">Parking</a>
+<a href="/booking">Booking</a>
+<a href="/allocation">Allocation</a>
+<a href="/status">Live Status</a>
+<a href="/about">About</a>
+
+</nav>
+
+</header>
+
+
+<main>
+
+<div class="title">
+
+<small>SMART PARKING SYSTEM</small>
+
+<h1>
+Reserve Your
+<span>Parking Spot</span>
+</h1>
+
+<p>
+Choose your zone and select an available parking slot.
+</p>
+
+</div>
+
+
+<div class="stats">
+
+<div class="stat">
+
+<small>AVAILABLE</small>
+
+<strong
+class="available"
+id="availableCount">
+0
+</strong>
+
+</div>
+
+
+<div class="stat">
+
+<small>BOOKED</small>
+
+<strong
+class="booked"
+id="bookedCount">
+0
+</strong>
+
+</div>
+
+
+<div class="stat">
+
+<small>SELECTED</small>
+
+<strong id="selectedStat">
+—
+</strong>
+
+</div>
+
+</div>
+
+
+<div class="layout">
+
+
+<section class="card">
+
+<h2>
+🅿️ Live Parking Map
+</h2>
+
+
+<div class="zones">
+
+<button
+class="zone active"
+data-zone="A"
+type="button">
+ZONE A
+</button>
+
+<button
+class="zone"
+data-zone="B"
+type="button">
+ZONE B
+</button>
+
+<button
+class="zone"
+data-zone="C"
+type="button">
+ZONE C
+</button>
+
+</div>
+
+
+<div class="parking">
+
+<div class="entrance">
+🚗 PARKING ENTRANCE
+</div>
+
+<div
+class="slot-grid"
+id="slotGrid">
+</div>
+
+</div>
+
+</section>
+
+
+<aside class="card booking">
+
+<h2>
+Booking Details
+</h2>
+
+
+<div class="selected">
+
+<small>
+SELECTED SLOT
+</small>
+
+<h1 id="selectedSlot">
+—
+</h1>
+
+</div>
+
+
+<label>
+VEHICLE NUMBER
+</label>
+
+<input
+id="vehicleNumber"
+placeholder="TS09 AB 1234"
+maxlength="15"
+>
+
+
+<label>
+PARKING DURATION
+</label>
+
+<select id="duration">
+
+<option>1 Hour</option>
+<option>2 Hours</option>
+<option>3 Hours</option>
+<option>4 Hours</option>
+<option>5 Hours</option>
+
+</select>
+
+
+<button
+id="bookButton"
+disabled
+type="button">
+SELECT A SLOT
+</button>
+
+
+<div
+class="message"
+id="message">
+Select a green slot to continue.
+</div>
+
+</aside>
+
+</div>
+
+</main>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+const slotGrid =
+document.getElementById("slotGrid");
+
+const selectedSlot =
+document.getElementById("selectedSlot");
+
+const selectedStat =
+document.getElementById("selectedStat");
+
+const vehicleInput =
+document.getElementById("vehicleNumber");
+
+const bookButton =
+document.getElementById("bookButton");
+
+const availableCount =
+document.getElementById("availableCount");
+
+const bookedCount =
+document.getElementById("bookedCount");
+
+const message =
+document.getElementById("message");
+
+const duration =
+document.getElementById("duration");
+
+
+let selected = null;
+
+let currentZone = "A";
+
+let savedBookings = [];
+
+
+/* =====================================================
+   PARKING SLOTS
+===================================================== */
+
+const zones = {
+
+A: [
+"A01","A02","A03","A04","A05","A06",
+"A07","A08","A09","A10","A11","A12",
+"A13","A14","A15","A16","A17","A18",
+"A19","A20","A21","A22","A23","A24",
+"A25","A26","A27","A28","A29","A30"
+],
+
+B: [
+"B01","B02","B03","B04","B05","B06",
+"B07","B08","B09","B10","B11","B12",
+"B13","B14","B15","B16","B17","B18",
+"B19","B20","B21","B22","B23","B24",
+"B25","B26","B27","B28","B29","B30"
+],
+
+C: [
+"C01","C02","C03","C04","C05","C06",
+"C07","C08","C09","C10","C11","C12",
+"C13","C14","C15","C16","C17","C18",
+"C19","C20","C21","C22","C23","C24",
+"C25","C26","C27","C28","C29","C30"
+]
+
+};
+
+
+/* =====================================================
+   GET BOOKINGS FROM FLASK
+===================================================== */
+
+async function loadBookings(){
+
+try{
+
+const response =
+await fetch("/api/bookings");
+
+const data =
+await response.json();
+
+if(data.success){
+
+savedBookings =
+data.bookings || [];
+
+}
+
+}catch(error){
+
+console.log(
+"Unable to load bookings:",
+error
+);
+
+savedBookings = [];
+
+}
+
+}
+
+
+/* =====================================================
+   CHECK BOOKED
+===================================================== */
+
+function isBooked(slotNumber){
+
+return savedBookings.some(
+function(item){
+
+return item.slot === slotNumber;
+
+}
+);
+
+}
+
+
+/* =====================================================
+   DEMO OCCUPIED
+===================================================== */
+
+function isOccupied(index){
+
+return index === 0 ||
+index === 9 ||
+index === 18 ||
+index === 27;
+
+}
+
+
+/* =====================================================
+   RENDER SLOTS
+===================================================== */
+
+function renderSlots(zone){
+
+currentZone = zone;
+
+selected = null;
+
+selectedSlot.textContent = "—";
+
+selectedStat.textContent = "—";
+
+bookButton.disabled = true;
+
+bookButton.textContent =
+"SELECT A SLOT";
+
+slotGrid.innerHTML = "";
+
+
+let available = 0;
+
+let booked = 0;
+
+
+zones[zone].forEach(
+function(number,index){
+
+const button =
+document.createElement("button");
+
+button.type = "button";
+
+button.className = "slot";
+
+
+/* REAL BOOKING */
+
+if(isBooked(number)){
+
+button.classList.add("booked");
+
+button.disabled = true;
+
+button.innerHTML =
+"<strong>" +
+number +
+"</strong>" +
+"<small>BOOKED</small>";
+
+booked++;
+
+}
+
+
+/* OCCUPIED */
+
+else if(isOccupied(index)){
+
+button.classList.add("occupied");
+
+button.disabled = true;
+
+button.innerHTML =
+"<strong>" +
+number +
+"</strong>" +
+"<small>OCCUPIED</small>";
+
+}
+
+
+/* AVAILABLE */
+
+else{
+
+button.classList.add("available");
+
+button.innerHTML =
+"<strong>" +
+number +
+"</strong>" +
+"<small>AVAILABLE</small>";
+
+available++;
+
+
+button.addEventListener(
+"click",
+function(){
+
+document
+.querySelectorAll(".slot.selected")
+.forEach(
+function(old){
+
+old.classList.remove(
+"selected"
+);
+
+}
+);
+
+
+button.classList.add("selected");
+
+selected = number;
+
+selectedSlot.textContent =
+number;
+
+selectedStat.textContent =
+number;
+
+updateButton();
+
+message.textContent =
+number +
+" selected. Enter your vehicle number.";
+
+}
+);
+
+}
+
+
+slotGrid.appendChild(button);
+
+}
+);
+
+
+availableCount.textContent =
+available;
+
+bookedCount.textContent =
+booked;
+
+}
+
+
+/* =====================================================
+   UPDATE BUTTON
+===================================================== */
+
+function updateButton(){
+
+if(
+selected &&
+vehicleInput.value.trim().length >= 4
+){
+
+bookButton.disabled = false;
+
+bookButton.textContent =
+"CONFIRM " +
+selected +
+" BOOKING";
+
+}
+
+else if(selected){
+
+bookButton.disabled = true;
+
+bookButton.textContent =
+"ENTER VEHICLE NUMBER";
+
+}
+
+else{
+
+bookButton.disabled = true;
+
+bookButton.textContent =
+"SELECT A SLOT";
+
+}
+
+}
+
+
+/* =====================================================
+   VEHICLE INPUT
+===================================================== */
+
+vehicleInput.addEventListener(
+"input",
+function(){
+
+updateButton();
+
+}
+);
+
+
+/* =====================================================
+   BOOK SLOT
+===================================================== */
+
+bookButton.addEventListener(
+"click",
+async function(){
+
+if(!selected){
+
+return;
+
+}
+
+
+const bookingSlot =
+selected;
+
+const vehicle =
+vehicleInput.value.trim();
+
+const selectedDuration =
+duration.value;
+
+
+bookButton.disabled = true;
+
+bookButton.textContent =
+"BOOKING...";
+
+
+try{
+
+const response =
+await fetch(
+"/api/bookings",
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:JSON.stringify({
+
+slot:bookingSlot,
+
+vehicle:vehicle,
+
+duration:selectedDuration
+
+})
+
+}
+);
+
+
+const data =
+await response.json();
+
+
+if(!response.ok){
+
+message.textContent =
+"❌ " +
+(data.message ||
+"Booking failed.");
+
+bookButton.disabled = false;
+
+updateButton();
+
+return;
+
+}
+
+
+/* SUCCESS */
+
+message.textContent =
+"✅ " +
+data.message;
+
+
+savedBookings.push(
+data.booking
+);
+
+
+selected = null;
+
+selectedSlot.textContent =
+"—";
+
+selectedStat.textContent =
+"—";
+
+vehicleInput.value = "";
+
+
+renderSlots(currentZone);
+
+
+/* KEEP SUCCESS MESSAGE */
+
+message.textContent =
+"✅ " +
+data.message;
+
+}
+catch(error){
+
+console.log(error);
+
+message.textContent =
+"❌ Server connection failed.";
+
+bookButton.disabled = false;
+
+updateButton();
+
+}
+
+}
+);
+
+
+/* =====================================================
+   ZONE BUTTONS
+===================================================== */
+
+document
+.querySelectorAll(".zone")
+.forEach(
+function(button){
+
+button.addEventListener(
+"click",
+async function(){
+
+document
+.querySelectorAll(".zone")
+.forEach(
+function(item){
+
+item.classList.remove(
+"active"
+);
+
+}
+);
+
+
+this.classList.add("active");
+
+
+await loadBookings();
+
+renderSlots(
+this.dataset.zone
+);
+
+}
+);
+
+}
+);
+
+
+/* =====================================================
+   FIRST LOAD
+===================================================== */
+
+async function start(){
+
+await loadBookings();
+
+renderSlots("A");
+
+}
+
+start();
+
+});
+
+</script>
+
+</body>
+</html>

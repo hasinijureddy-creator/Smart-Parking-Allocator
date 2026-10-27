@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>About | Smart Parking Allocator</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    background:#050b14;
+    color:white;
+    min-height:100vh;
+}
+
+/* ================= HEADER ================= */
+
+header{
+    height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 40px;
+    background:#081321;
+    border-bottom:1px solid #20364d;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.logo{
+    font-size:21px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#00d9ff;
+}
+
+nav{
+    display:flex;
+    gap:25px;
+}
+
+nav a{
+    color:#9baabd;
+    text-decoration:none;
+    font-size:13px;
+    transition:.3s;
+}
+
+nav a:hover{
+    color:#00d9ff;
+}
+
+/* ================= MAIN ================= */
+
+main{
+    width:92%;
+    max-width:1250px;
+    margin:0 auto;
+    padding:55px 0 80px;
+}
+
+/* ================= HERO ================= */
+
+.about-hero{
+    text-align:center;
+    padding:30px 20px 50px;
+}
+
+.about-badge{
+    display:inline-block;
+    padding:8px 18px;
+    border:1px solid #1d6075;
+    border-radius:30px;
+    color:#00d9ff;
+    background:rgba(0,217,255,.06);
+    font-size:12px;
+    letter-spacing:1px;
+    margin-bottom:20px;
+}
+
+.about-hero h1{
+    font-size:46px;
+    margin-bottom:15px;
+}
+
+.about-hero h1 span{
+    color:#00d9ff;
+}
+
+.about-hero p{
+    max-width:800px;
+    margin:auto;
+    color:#8291a5;
+    font-size:15px;
+    line-height:1.8;
+}
+
+/* ================= COMMON SECTION ================= */
+
+.section{
+    margin-top:25px;
+    margin-bottom:35px;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.section-title h2{
+    font-size:28px;
+    color:white;
+    margin-bottom:8px;
+}
+
+.section-title h2 span{
+    color:#00d9ff;
+}
+
+.section-title p{
+    color:#718197;
+    font-size:13px;
+}
+
+/* ================= ABOUT PROJECT ================= */
+
+.about-card{
+    background:linear-gradient(145deg,#0d1b2d,#07111d);
+    border:1px solid #20364d;
+    border-radius:22px;
+    padding:32px;
+    box-shadow:0 15px 40px rgba(0,0,0,.25);
+}
+
+.about-card h3{
+    color:#4fdcff;
+    margin-bottom:15px;
+    font-size:21px;
+}
+
+.about-card p{
+    color:#a6b2c1;
+    line-height:1.8;
+    font-size:14px;
+}
+
+/* ================= INFO GRID ================= */
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.info-card{
+    background:#0b1726;
+    border:1px solid #20364d;
+    border-radius:18px;
+    padding:25px;
+    transition:.3s;
+}
+
+.info-card:hover{
+    transform:translateY(-5px);
+    border-color:#00d9ff;
+    box-shadow:0 12px 35px rgba(0,217,255,.10);
+}
+
+.info-icon{
+    font-size:35px;
+    margin-bottom:15px;
+}
+
+.info-card h3{
+    color:white;
+    margin-bottom:10px;
+    font-size:18px;
+}
+
+.info-card p{
+    color:#8291a5;
+    line-height:1.7;
+    font-size:13px;
+}
+
+/* ================= FEATURES ================= */
+
+.features{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.feature{
+    background:#081522;
+    border:1px solid #20364d;
+    border-radius:15px;
+    padding:20px;
+}
+
+.feature strong{
+    color:#36e59a;
+    display:block;
+    margin-bottom:8px;
+}
+
+.feature span{
+    color:#91a0b3;
+    font-size:13px;
+    line-height:1.6;
+}
+
+/* ================= WORKFLOW ================= */
+
+.workflow{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.step{
+    text-align:center;
+    background:#0b1726;
+    border:1px solid #20364d;
+    border-radius:16px;
+    padding:22px 15px;
+}
+
+.step-number{
+    width:40px;
+    height:40px;
+    margin:0 auto 12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:#102a3b;
+    color:#00d9ff;
+    font-weight:bold;
+}
+
+.step h3{
+    font-size:15px;
+    margin-bottom:8px;
+}
+
+.step p{
+    color:#8291a5;
+    font-size:12px;
+    line-height:1.5;
+}
+
+/* =========================================================
+   SUBJECT SECTION
+   IMPORTANT:
+   BELOW SUBJECT CODE IS KEPT EXACTLY AS PROVIDED
+   ========================================================= */
+
+.subject-heading{
+    text-align:center;
+    margin-top:50px;
+    margin-bottom:10px;
+}
+
+.subject-heading h2{
+    font-size:30px;
+    color:white;
+}
+
+.subject-heading h2 span{
+    color:#00d9ff;
+}
+
+.subject-heading p{
+    color:#718197;
+    font-size:13px;
+    margin-top:8px;
+}
+
+
+/* =========================================================
+   YOUR SUBJECT CODE - NOT CHANGED
+   ========================================================= */
+
+.subject-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+    margin-top:25px;
+}
+
+.subject-box{
+    display:block;
+    text-decoration:none;
+    color:white;
+    background:#0b1726;
+    border:1px solid #20364d;
+    border-radius:20px;
+    padding:28px 20px;
+    min-height:190px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+    transition:.3s;
+}
+
+.subject-box::before{
+    content:"";
+    position:absolute;
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    background:#00d9ff;
+    filter:blur(55px);
+    opacity:.08;
+    right:-25px;
+    top:-25px;
+}
+
+.subject-box:hover{
+    border-color:#00d9ff;
+    transform:translateY(-7px);
+    box-shadow:0 15px 40px rgba(0,217,255,.14);
+}
+
+.subject-icon{
+    font-size:45px;
+    margin-bottom:12px;
+}
+
+.subject-box h3{
+    color:white;
+    font-size:20px;
+    margin-bottom:10px;
+}
+
+.subject-box p{
+    color:#8291a5;
+    font-size:12px;
+    line-height:1.5;
+}
+
+.click-text{
+    display:block;
+    margin-top:18px;
+    color:#00d9ff;
+    font-size:11px;
+    font-weight:bold;
+    letter-spacing:1px;
+}
+
+@media(max-width:950px){
+
+    .subject-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:600px){
+
+    .subject-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+
+/* ================= FOOTER ================= */
+
+footer{
+    border-top:1px solid #20364d;
+    text-align:center;
+    padding:30px 20px;
+    color:#718197;
+    font-size:12px;
+    line-height:1.7;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:900px){
+
+    header{
+        padding:0 20px;
+    }
+
+    nav{
+        gap:12px;
+    }
+
+    .info-grid{
+        grid-template-columns:1fr;
+    }
+
+    .workflow{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:600px){
+
+    nav{
+        display:none;
+    }
+
+    main{
+        width:90%;
+    }
+
+    .about-hero h1{
+        font-size:34px;
+    }
+
+    .features{
+        grid-template-columns:1fr;
+    }
+
+    .workflow{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+    <div class="logo">
+        🚗 Smart <span>Parking</span>
+    </div>
+
+    <nav>
+
+        <a href="/">Home</a>
+        <a href="/parking">Parking</a>
+        <a href="/booking">Booking</a>
+        <a href="/allocation">Allocation</a>
+        <a href="/live">Live Status</a>
+        <a href="/prediction">Prediction</a>
+        <a href="/about">About</a>
+
+    </nav>
+
+</header>
+
+
+<main>
+
+
+<!-- ================= ABOUT HERO ================= -->
+
+<section class="about-hero">
+
+    <div class="about-badge">
+        SMART PARKING MANAGEMENT SYSTEM
+    </div>
+
+    <h1>
+        About <span>Our Project</span>
+    </h1>
+
+    <p>
+        Smart Parking Allocator is a web-based parking management
+        system designed to make parking allocation, booking and
+        availability management simple, fast and efficient.
+    </p>
+
+</section>
+
+
+<!-- ================= PROJECT INTRODUCTION ================= -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <h2>
+            🚗 What is <span>Smart Parking Allocator?</span>
+        </h2>
+
+        <p>
+            A smarter way to manage parking spaces.
+        </p>
+
+    </div>
+
+
+    <div class="about-card">
+
+        <h3>💡 Project Overview</h3>
+
+        <p>
+            Our Smart Parking Allocator helps users find and reserve
+            suitable parking spaces without manually searching through
+            a parking area. The system maintains parking information,
+            checks slot availability and provides a simple interface
+            for parking allocation and booking.
+        </p>
+
+        <br>
+
+        <p>
+            The project combines programming, algorithms, data
+            structures and mathematical concepts to demonstrate how
+            different academic subjects can be applied to a practical
+            real-world problem.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ================= PROBLEM + SOLUTION + GOAL ================= -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <h2>
+            🎯 Project <span>Purpose</span>
+        </h2>
+
+        <p>
+            Understanding the problem and our approach.
+        </p>
+
+    </div>
+
+
+    <div class="info-grid">
+
+
+        <div class="info-card">
+
+            <div class="info-icon">⚠️</div>
+
+            <h3>Problem Statement</h3>
+
+            <p>
+                Finding available parking spaces manually can take
+                time and may cause confusion when many vehicles are
+                entering a parking area.
+            </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <div class="info-icon">💡</div>
+
+            <h3>Our Solution</h3>
+
+            <p>
+                Our system displays parking availability and allows
+                users to allocate and book suitable parking slots
+                through a simple web interface.
+            </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <div class="info-icon">🎯</div>
+
+            <h3>Project Goal</h3>
+
+            <p>
+                To create an organized parking management system
+                that improves slot visibility, allocation and booking
+                using software technologies.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- ================= FEATURES ================= -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <h2>
+            ⚡ Key <span>Features</span>
+        </h2>
+
+        <p>
+            Important functions available in our project.
+        </p>
+
+    </div>
+
+
+    <div class="features">
+
+
+        <div class="feature">
+
+            <strong>🅿️ Parking Slot Management</strong>
+
+            <span>
+                Displays parking spaces and their availability
+                across different parking zones.
+            </span>
+
+        </div>
+
+
+        <div class="feature">
+
+            <strong>🚗 Smart Slot Allocation</strong>
+
+            <span>
+                Finds an available slot based on the selected
+                parking zone and current booking information.
+            </span>
+
+        </div>
+
+
+        <div class="feature">
+
+            <strong>📋 Online Booking</strong>
+
+            <span>
+                Users can select a parking slot and store booking
+                information including vehicle details and duration.
+            </span>
+
+        </div>
+
+
+        <div class="feature">
+
+            <strong>📊 Live Parking Information</strong>
+
+            <span>
+                Parking data can be retrieved through APIs and
+                displayed to users through the web interface.
+            </span>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- ================= HOW IT WORKS ================= -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <h2>
+            ⚙️ How the <span>System Works</span>
+        </h2>
+
+        <p>
+            Simple steps followed by the parking system.
+        </p>
+
+    </div>
+
+
+    <div class="workflow">
+
+
+        <div class="step">
+
+            <div class="step-number">1</div>
+
+            <h3>Vehicle Details</h3>
+
+            <p>
+                User enters vehicle information and selects
+                required parking preferences.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">2</div>
+
+            <h3>Check Availability</h3>
+
+            <p>
+                The system checks currently booked and occupied
+                parking slots.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">3</div>
+
+            <h3>Allocate Slot</h3>
+
+            <p>
+                An available parking slot is identified and
+                displayed to the user.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">4</div>
+
+            <h3>Confirm Booking</h3>
+
+            <p>
+                The selected parking slot is saved as a booking
+                for future reference.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- ================= SUBJECTS ================= -->
+
+<section class="section">
+
+    <div class="subject-heading">
+
+        <h2>
+            📚 <span>Subjects Used</span> in Our Project
+        </h2>
+
+        <p>
+            Click a subject to explore its concepts, formulas and
+            connection with our Smart Parking Allocator.
+        </p>
+
+    </div>
+
+
+    <div class="subject-grid">
+
+
+    <!-- ================= PYTHON ================= -->
+
+    <a href="/subject/python" class="subject-box">
+
+        <div class="subject-icon">🐍</div>
+
+        <h3>Python</h3>
+
+        <p>
+            Backend, Flask, APIs, JSON and file handling.
+        </p>
+
+        <span class="click-text">
+            CLICK TO EXPLORE →
+        </span>
+
+    </a>
+
+
+    <!-- ================= OOPJ ================= -->
+
+    <a href="/subject/oopj" class="subject-box">
+
+        <div class="subject-icon">☕</div>
+
+        <h3>OOPJ / Java</h3>
+
+        <p>
+            Classes, objects, encapsulation, inheritance,
+            polymorphism and abstraction.
+        </p>
+
+        <span class="click-text">
+            CLICK TO EXPLORE →
+        </span>
+
+    </a>
+
+
+    <!-- ================= ADSA ================= -->
+
+    <a href="/subject/adsa" class="subject-box">
+
+        <div class="subject-icon">🌳</div>
+
+        <h3>ADSA</h3>
+
+        <p>
+            AVL Tree, Heap, searching, sorting and
+            algorithm concepts.
+        </p>
+
+        <span class="click-text">
+            CLICK TO EXPLORE →
+        </span>
+
+    </a>
+
+
+    <!-- ================= DMGT ================= -->
+
+    <a href="/subject/dmgt" class="subject-box">
+
+        <div class="subject-icon">📐</div>
+
+        <h3>DMGT</h3>
+
+        <p>
+            Sets, relations, functions, graphs and
+            mathematical logic.
+        </p>
+
+        <span class="click-text">
+            CLICK TO EXPLORE →
+        </span>
+
+    </a>
+
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    🚗 <strong>Smart Parking Allocator</strong>
+
+    <br>
+
+    A project combining Python • OOPJ • ADSA • DMGT
+
+    <br><br>
+
+    Smart Parking Management System
+
+</footer>
+
+
+</body>
+</html>

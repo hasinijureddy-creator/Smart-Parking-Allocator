@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Subject Details | Smart Parking Allocator</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#050b14;
+    color:white;
+    min-height:100vh;
+}
+
+header{
+    height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
+    background:#081321;
+    border-bottom:1px solid #20364d;
+}
+
+.logo{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#00d9ff;
+}
+
+nav{
+    display:flex;
+    gap:20px;
+}
+
+nav a{
+    color:#9baabd;
+    text-decoration:none;
+    font-size:13px;
+}
+
+nav a:hover{
+    color:#00d9ff;
+}
+
+main{
+    width:94%;
+    max-width:1100px;
+    margin:45px auto 70px;
+}
+
+.back{
+    display:inline-block;
+    margin-bottom:25px;
+    color:#4fdcff;
+    text-decoration:none;
+    font-size:14px;
+}
+
+.hero{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.hero-icon{
+    font-size:65px;
+    margin-bottom:12px;
+}
+
+.hero h1{
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.hero h1 span{
+    color:#8b63ff;
+}
+
+.hero p{
+    color:#8291a5;
+    line-height:1.6;
+}
+
+.card{
+    background:linear-gradient(145deg,#0d1b2d,#07111d);
+    border:1px solid #20364d;
+    border-radius:22px;
+    padding:28px;
+    margin-bottom:20px;
+}
+
+.card h2{
+    color:#4fdcff;
+    margin-bottom:18px;
+}
+
+.card p{
+    color:#a6b2c1;
+    line-height:1.7;
+}
+
+ul{
+    padding-left:22px;
+}
+
+li{
+    color:#a6b2c1;
+    margin:10px 0;
+    line-height:1.5;
+}
+
+.formula{
+    background:#050b14;
+    border-left:4px solid #8b63ff;
+    border-radius:9px;
+    padding:15px;
+    margin:12px 0;
+    color:#e5ddff;
+    font-family:monospace;
+    font-size:14px;
+}
+
+.use{
+    border-color:#245b50;
+}
+
+.use h2{
+    color:#36e59a;
+}
+
+.topic-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.topic{
+    background:#07111e;
+    border:1px solid #20364d;
+    border-radius:15px;
+    padding:18px;
+}
+
+.topic strong{
+    display:block;
+    color:#8b63ff;
+    margin-bottom:8px;
+}
+
+.topic span{
+    color:#91a0b3;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.footer{
+    text-align:center;
+    color:#718197;
+    border-top:1px solid #20364d;
+    padding-top:25px;
+    margin-top:40px;
+}
+
+@media(max-width:700px){
+
+    nav{
+        display:none;
+    }
+
+    .hero h1{
+        font-size:32px;
+    }
+
+    .topic-grid{
+        grid-template-columns:1fr;
+    }
+
+    main{
+        width:92%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        🚗 Smart <span>Parking</span>
+    </div>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/parking">Parking</a>
+        <a href="/booking">Booking</a>
+        <a href="/allocation">Allocation</a>
+        <a href="/status">Live Status</a>
+        <a href="/about">About</a>
+    </nav>
+
+</header>
+
+<main>
+
+<a href="/about" class="back">← Back to About</a>
+
+<!-- PYTHON -->
+
+{% if subject == "python" %}
+
+<section class="hero">
+
+    <div class="hero-icon">🐍</div>
+
+    <h1>Python <span>Concepts</span></h1>
+
+    <p>
+        Python concepts, formulas and their role in our
+        Smart Parking Allocator project.
+    </p>
+
+</section>
+
+<section class="card">
+
+    <h2>📚 Concepts Used</h2>
+
+    <ul>
+        <li>Variables and Data Types</li>
+        <li>Conditional Statements</li>
+        <li>Functions</li>
+        <li>Lists and Dictionaries</li>
+        <li>File Handling</li>
+        <li>JSON Handling</li>
+        <li>Exception Handling</li>
+        <li>Flask Framework</li>
+        <li>HTTP Routes and APIs</li>
+    </ul>
+
+</section>
+
+<section class="card">
+
+    <h2>📐 Formulas / Logic Used</h2>
+
+    <div class="formula">
+        Available Slots = Total Slots − Occupied Slots − Booked Slots
+    </div>
+
+    <div class="formula">
+        Occupancy % = ((Occupied + Booked) / Total Slots) × 100
+    </div>
+
+    <div class="formula">
+        Availability % = (Available Slots / Total Slots) × 100
+    </div>
+
+</section>
+
+<section class="card use">
+
+    <h2>🚗 Python in Our Project</h2>
+
+    <p>
+        Python is the main backend language of our project.
+        Flask is used to create web pages and APIs. Python
+        reads and writes parking data using JSON and manages
+        parking allocation, booking and live parking information.
+    </p>
+
+</section>
+
+{% endif %}
+
+
+<!-- OOPJ -->
+
+{% if subject == "oopj" %}
+
+<section class="hero">
+
+    <div class="hero-icon">☕</div>
+
+    <h1>Java / <span>OOPJ</span></h1>
+
+    <p>
+        Object-oriented programming concepts related to
+        our Smart Parking Allocator.
+    </p>
+
+</section>
+
+<section class="card">
+
+    <h2>📚 OOP Concepts</h2>
+
+    <div class="topic-grid">
+
+        <div class="topic">
+            <strong>Encapsulation</strong>
+            <span>
+                Combining data and methods into a single unit.
+            </span>
+        </div>
+
+        <div class="topic">
+            <strong>Inheritance</strong>
+            <span>
+                Reusing properties and methods from another class.
+            </span>
+        </div>
+
+        <div class="topic">
+            <strong>Polymorphism</strong>
+            <span>
+                Same interface or method behaving in different ways.
+            </span>
+        </div>
+
+        <div class="topic">
+            <strong>Abstraction</strong>
+            <span>
+                Showing important features while hiding implementation details.
+            </span>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="card">
+
+    <h2>📐 OOP Relationships</h2>
+
+    <div class="formula">
+        Class → Object → Data + Methods
+    </div>
+
+    <div class="formula">
+        Inheritance → Parent Class → Child Class
+    </div>
+
+    <div class="formula">
+        Encapsulation → Data + Methods → Single Unit
+    </div>
+
+</section>
+
+<section class="card use">
+
+    <h2>🚗 OOPJ in Our Project</h2>
+
+    <p>
+        OOP concepts help us understand the project through
+        objects such as Vehicle, ParkingSlot, Booking and
+        ParkingZone. These concepts make software design
+        organized, reusable and easier to maintain.
+    </p>
+
+</section>
+
+{% endif %}
+
+
+<!-- ADSA -->
+
+{% if subject == "adsa" %}
+
+<section class="hero">
+
+    <div class="hero-icon">🌳</div>
+
+    <h1><span>ADSA</span></h1>
+
+    <p>
+        Algorithms and Data Structures used to understand
+        efficient parking allocation.
+    </p>
+
+</section>
+
+<section class="card">
+
+    <h2>🌳 AVL Tree</h2>
+
+    <p>
+        An AVL Tree is a self-balancing Binary Search Tree.
+        It maintains balance after insertion and deletion.
+    </p>
+
+    <div class="formula">
+        Balance Factor = Height(Left Subtree) − Height(Right Subtree)
+    </div>
+
+    <div class="formula">
+        AVL Condition: -1 ≤ Balance Factor ≤ +1
+    </div>
+
+    <p style="margin-top:15px;">
+        Rotations: LL Rotation, RR Rotation, LR Rotation and RL Rotation.
+    </p>
+
+</section>
+
+<section class="card">
+
+    <h2>⛰️ Heap</h2>
+
+    <p>
+        A Heap is a complete binary tree commonly used in
+        priority queues and Heap Sort.
+    </p>
+
+    <div class="formula">
+        Parent(i) = ⌊(i − 1) / 2⌋
+    </div>
+
+    <div class="formula">
+        Left Child(i) = 2i + 1
+    </div>
+
+    <div class="formula">
+        Right Child(i) = 2i + 2
+    </div>
+
+    <div class="formula">
+        Heap Sort Time Complexity = O(n log n)
+    </div>
+
+</section>
+
+<section class="card">
+
+    <h2>🔍 Searching</h2>
+
+    <div class="formula">
+        Linear Search → O(n)
+    </div>
+
+    <div class="formula">
+        Binary Search → O(log n)
+    </div>
+
+</section>
+
+<section class="card">
+
+    <h2>🔄 Sorting</h2>
+
+    <div class="formula">
+        Bubble Sort → O(n²)
+    </div>
+
+    <div class="formula">
+        Selection Sort → O(n²)
+    </div>
+
+    <div class="formula">
+        Insertion Sort → O(n²)
+    </div>
+
+    <div class="formula">
+        Merge Sort → O(n log n)
+    </div>
+
+    <div class="formula">
+        Quick Sort → Average O(n log n)
+    </div>
+
+</section>
+
+<section class="card use">
+
+    <h2>🚗 ADSA in Our Project</h2>
+
+    <p>
+        ADSA concepts help us understand how parking slots can
+        be searched, organized and selected efficiently.
+        Searching, sorting, trees and heaps provide the
+        algorithmic foundation for designing a smart parking
+        allocation system.
+    </p>
+
+</section>
+
+{% endif %}
+
+
+<!-- DMGT -->
+
+{% if subject == "dmgt" %}
+
+<section class="hero">
+
+    <div class="hero-icon">📐</div>
+
+    <h1><span>DMGT</span></h1>
+
+    <p>
+        Discrete Mathematics concepts related to parking
+        slots, zones, relationships and logical decisions.
+    </p>
+
+</section>
+
+<section class="card">
+
+    <h2>🔢 Sets</h2>
+
+    <p>
+        Sets can represent groups of parking slots such as
+        available slots and booked slots.
+    </p>
+
+    <div class="formula">
+        A ∪ B = Union
+    </div>
+
+    <div class="formula">
+        A ∩ B = Intersection
+    </div>
+
+    <div class="formula">
+        A − B = Difference
+    </div>
+
+    <div class="formula">
+        |A ∪ B| = |A| + |B| − |A ∩ B|
+    </div>
+
+</section>
+
+<section class="card">
+
+    <h2>🔗 Relations</h2>
+
+    <div class="formula">
+        R ⊆ A × B
+    </div>
+
+    <div class="formula">
+        Number of Relations = 2^(|A| × |B|)
+    </div>
+
+</section>
+
+<section class="card">
+
+    <h2>🧩 Functions</h2>
+
+    <p>
+        A function maps every element of a domain to exactly
+        one element of the codomain.
+    </p>
+
+    <div class="formula">
+        f : A → B
+    </div>
+
+</section>
+
+<section class="card">
+
+    <h2>🕸️ Graphs</h2>
+
+    <p>
+        Graphs can represent relationships and connections
+        between parking zones or locations.
+    </p>
+
+    <div class="formula">
+        G = (V, E)
+    </div>
+
+    <div class="formula">
+        Sum of Degrees = 2|E|
+    </div>
+
+</section>
+
+<section class="card">
+
+    <h2>🧠 Logic</h2>
+
+    <div class="formula">
+        AND → P ∧ Q
+    </div>
+
+    <div class="formula">
+        OR → P ∨ Q
+    </div>
+
+    <div class="formula">
+        NOT → ¬P
+    </div>
+
+    <div class="formula">
+        Implication → P → Q
+    </div>
+
+</section>
+
+<section class="card use">
+
+    <h2>🚗 DMGT in Our Project</h2>
+
+    <p>
+        DMGT concepts help represent relationships between
+        vehicles, parking slots and zones. Sets can represent
+        available and booked slots, while graphs and logic
+        can represent connections and allocation conditions.
+    </p>
+
+</section>
+
+{% endif %}
+
+
+<div class="footer">
+
+    🚗 Smart Parking Allocator
+    <br><br>
+    Python • Java/OOPJ • ADSA • DMGT
+
+</div>
+
+</main>
+
+</body>
+</html>

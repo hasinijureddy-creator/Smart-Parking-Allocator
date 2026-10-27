@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart Allocation | Smart Parking</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#050b14;
+    color:white;
+    min-height:100vh;
+}
+
+header{
+    height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
+    background:#081321;
+    border-bottom:1px solid #1d334c;
+}
+
+.logo{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#00d9ff;
+}
+
+nav{
+    display:flex;
+    gap:20px;
+}
+
+nav a{
+    color:#9baabd;
+    text-decoration:none;
+    font-size:13px;
+}
+
+nav a:hover{
+    color:white;
+}
+
+main{
+    width:94%;
+    max-width:1100px;
+    margin:45px auto;
+}
+
+.hero{
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.hero small{
+    color:#00d9ff;
+    letter-spacing:3px;
+}
+
+.hero h1{
+    font-size:42px;
+    margin-top:10px;
+}
+
+.hero h1 span{
+    color:#8b63ff;
+}
+
+.hero p{
+    color:#8291a5;
+    margin-top:10px;
+}
+
+.container{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+.card{
+    background:#0b1726;
+    border:1px solid #20364d;
+    border-radius:22px;
+    padding:28px;
+}
+
+.card h2{
+    margin-bottom:22px;
+}
+
+label{
+    display:block;
+    color:#91a0b3;
+    font-size:12px;
+    margin:18px 0 7px;
+}
+
+input,
+select{
+    width:100%;
+    padding:14px;
+    border-radius:11px;
+    border:1px solid #29415b;
+    background:#07111e;
+    color:white;
+    outline:none;
+}
+
+input:focus,
+select:focus{
+    border-color:#00d9ff;
+}
+
+.allocate-btn{
+    width:100%;
+    margin-top:25px;
+    padding:16px;
+    border:0;
+    border-radius:12px;
+    color:white;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+    background:linear-gradient(135deg,#00bde9,#704cff);
+    transition:.2s;
+}
+
+.allocate-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 30px rgba(112,76,255,.25);
+}
+
+.result{
+    min-height:300px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+.result-icon{
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    font-size:38px;
+    background:rgba(0,217,255,.1);
+    border:1px solid rgba(0,217,255,.35);
+    margin-bottom:20px;
+}
+
+.result h3{
+    font-size:24px;
+    margin-bottom:10px;
+}
+
+.result p{
+    color:#8291a5;
+    line-height:1.6;
+}
+
+.slot-result{
+    display:none;
+    margin-top:20px;
+    width:170px;
+    padding:18px;
+    border-radius:15px;
+    background:linear-gradient(135deg,#704cff,#b34fff);
+    box-shadow:0 10px 35px rgba(112,76,255,.25);
+}
+
+.slot-result small{
+    display:block;
+    color:#ddd;
+    margin-bottom:6px;
+}
+
+.slot-result strong{
+    font-size:32px;
+}
+
+.info{
+    margin-top:25px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.info-box{
+    padding:15px;
+    text-align:center;
+    background:#07111e;
+    border:1px solid #20364d;
+    border-radius:12px;
+}
+
+.info-box small{
+    display:block;
+    color:#77889d;
+    margin-bottom:6px;
+}
+
+.info-box strong{
+    color:#4fdcff;
+}
+
+.message{
+    margin-top:20px;
+    color:#36e59a;
+    font-size:13px;
+    text-align:center;
+}
+
+@media(max-width:800px){
+
+    nav{
+        display:none;
+    }
+
+    .container{
+        grid-template-columns:1fr;
+    }
+
+    .hero h1{
+        font-size:32px;
+    }
+}
+
+@media(max-width:500px){
+
+    main{
+        width:92%;
+        margin:30px auto;
+    }
+
+    .card{
+        padding:20px;
+    }
+
+    .info{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        🚗 Smart <span>Parking</span>
+    </div>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/parking">Parking</a>
+        <a href="/booking">Booking</a>
+        <a href="/allocation">Allocation</a>
+        <a href="/status">Live Status</a>
+        <a href="/about">About</a>
+    </nav>
+
+</header>
+
+
+<main>
+
+    <div class="hero">
+
+        <small>AI POWERED PARKING</small>
+
+        <h1>
+            Smart <span>Allocation</span>
+        </h1>
+
+        <p>
+            Let the system find the most suitable parking slot for your vehicle.
+        </p>
+
+    </div>
+
+
+    <div class="container">
+
+
+        <!-- INPUT CARD -->
+
+        <section class="card">
+
+            <h2>🧠 Find My Parking Slot</h2>
+
+            <label>
+                VEHICLE NUMBER
+            </label>
+
+            <input
+                type="text"
+                id="vehicleNumber"
+                placeholder="TS09 AB 1234"
+                maxlength="15"
+            >
+
+
+            <label>
+                VEHICLE TYPE
+            </label>
+
+            <select id="vehicleType">
+
+                <option value="car">
+                    🚗 Car
+                </option>
+
+                <option value="bike">
+                    🏍️ Bike
+                </option>
+
+                <option value="suv">
+                    🚙 SUV
+                </option>
+
+                <option value="ev">
+                    ⚡ Electric Vehicle
+                </option>
+
+            </select>
+
+
+            <label>
+                PREFERRED ZONE
+            </label>
+
+            <select id="zone">
+
+                <option value="auto">
+                    🤖 Automatic
+                </option>
+
+                <option value="A">
+                    Zone A
+                </option>
+
+                <option value="B">
+                    Zone B
+                </option>
+
+                <option value="C">
+                    Zone C
+                </option>
+
+            </select>
+
+
+            <button
+                class="allocate-btn"
+                id="allocateButton"
+            >
+                ✨ FIND BEST SLOT
+            </button>
+
+
+            <div
+                class="message"
+                id="message"
+            >
+            </div>
+
+        </section>
+
+
+        <!-- RESULT CARD -->
+
+        <section class="card result">
+
+            <div class="result-icon">
+                🅿️
+            </div>
+
+            <h3 id="resultTitle">
+                Waiting for Allocation
+            </h3>
+
+            <p id="resultText">
+                Enter your vehicle details and let Smart Parking
+                automatically select a suitable slot.
+            </p>
+
+
+            <div
+                class="slot-result"
+                id="slotResult"
+            >
+
+                <small>
+                    RECOMMENDED SLOT
+                </small>
+
+                <strong id="recommendedSlot">
+                    A01
+                </strong>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- SYSTEM INFO -->
+
+    <div class="info">
+
+        <div class="info-box">
+
+            <small>
+                ALLOCATION
+            </small>
+
+            <strong>
+                SMART
+            </strong>
+
+        </div>
+
+
+        <div class="info-box">
+
+            <small>
+                STATUS
+            </small>
+
+            <strong>
+                READY
+            </strong>
+
+        </div>
+
+
+        <div class="info-box">
+
+            <small>
+                ZONES
+            </small>
+
+            <strong>
+                A / B / C
+            </strong>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        const vehicleNumber =
+            document.getElementById(
+                "vehicleNumber"
+            );
+
+        const vehicleType =
+            document.getElementById(
+                "vehicleType"
+            );
+
+        const zone =
+            document.getElementById(
+                "zone"
+            );
+
+        const allocateButton =
+            document.getElementById(
+                "allocateButton"
+            );
+
+        const resultTitle =
+            document.getElementById(
+                "resultTitle"
+            );
+
+        const resultText =
+            document.getElementById(
+                "resultText"
+            );
+
+        const slotResult =
+            document.getElementById(
+                "slotResult"
+            );
+
+        const recommendedSlot =
+            document.getElementById(
+                "recommendedSlot"
+            );
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        allocateButton.addEventListener(
+            "click",
+            function(){
+
+                const vehicle =
+                    vehicleNumber.value.trim();
+
+
+                if(vehicle.length < 4){
+
+                    message.style.color =
+                        "#ff6475";
+
+                    message.textContent =
+                        "Please enter a valid vehicle number.";
+
+                    vehicleNumber.focus();
+
+                    return;
+                }
+
+
+                message.style.color =
+                    "#36e59a";
+
+                message.textContent =
+                    "🔍 Finding the best available slot...";
+
+
+                resultTitle.textContent =
+                    "Allocating Slot...";
+
+                resultText.textContent =
+                    "Checking parking availability.";
+
+
+                slotResult.style.display =
+                    "none";
+
+
+                allocateButton.disabled =
+                    true;
+
+
+                allocateButton.textContent =
+                    "⏳ ALLOCATING...";
+
+
+                setTimeout(
+                    function(){
+
+                        let selectedZone =
+                            zone.value;
+
+
+                        if(selectedZone === "auto"){
+
+                            const zones =
+                                ["A","B","C"];
+
+                            selectedZone =
+                                zones[
+                                    Math.floor(
+                                        Math.random() *
+                                        zones.length
+                                    )
+                                ];
+
+                        }
+
+
+                        const slotNumber =
+                            Math.floor(
+                                Math.random() * 30
+                            ) + 1;
+
+
+                        const slot =
+                            selectedZone +
+                            String(
+                                slotNumber
+                            ).padStart(2,"0");
+
+
+                        recommendedSlot.textContent =
+                            slot;
+
+
+                        slotResult.style.display =
+                            "block";
+
+
+                        resultTitle.textContent =
+                            "Slot Allocated! 🎉";
+
+
+                        resultText.textContent =
+                            "A suitable parking slot has been selected for your vehicle.";
+
+
+                        message.textContent =
+                            "✅ Smart allocation completed successfully.";
+
+
+                        allocateButton.disabled =
+                            false;
+
+
+                        allocateButton.textContent =
+                            "✨ FIND BEST SLOT";
+
+
+                        playSuccessSound();
+
+                    },
+                    1200
+                );
+
+            }
+        );
+
+
+        function playSuccessSound(){
+
+            try{
+
+                const AudioContext =
+                    window.AudioContext ||
+                    window.webkitAudioContext;
+
+
+                if(!AudioContext){
+                    return;
+                }
+
+
+                const audio =
+                    new AudioContext();
+
+
+                const oscillator =
+                    audio.createOscillator();
+
+
+                const gain =
+                    audio.createGain();
+
+
+                oscillator.type =
+                    "sine";
+
+
+                oscillator.frequency.setValueAtTime(
+                    523,
+                    audio.currentTime
+                );
+
+
+                oscillator.frequency.setValueAtTime(
+                    659,
+                    audio.currentTime + 0.12
+                );
+
+
+                oscillator.frequency.setValueAtTime(
+                    784,
+                    audio.currentTime + 0.24
+                );
+
+
+                gain.gain.setValueAtTime(
+                    0.001,
+                    audio.currentTime
+                );
+
+
+                gain.gain.exponentialRampToValueAtTime(
+                    0.25,
+                    audio.currentTime + 0.03
+                );
+
+
+                gain.gain.exponentialRampToValueAtTime(
+                    0.001,
+                    audio.currentTime + 0.5
+                );
+
+
+                oscillator.connect(gain);
+
+                gain.connect(
+                    audio.destination
+                );
+
+
+                oscillator.start();
+
+                oscillator.stop(
+                    audio.currentTime + 0.5
+                );
+
+            }
+            catch(error){
+
+                console.log(
+                    "Sound unavailable"
+                );
+
+            }
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>

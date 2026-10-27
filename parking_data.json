@@ -1,0 +1,37 @@
+{
+    "bookings": [
+        {
+            "slot": "A03",
+            "vehicle": "AP98 AB 53473",
+            "duration": "4 Hours"
+        },
+        {
+            "slot": "A15",
+            "vehicle": "TS08 AB 2354",
+            "duration": "1 Hour"
+        },
+        {
+            "slot": "A16",
+            "vehicle": "AP6504_R",
+            "duration": "3 Hours"
+        },
+        {
+            "slot": "A04",
+            "vehicle": "74680076",
+            "vehicleType": "car",
+            "duration": "1 Hour"
+        },
+        {
+            "slot": "A05",
+            "vehicle": "AP876544",
+            "vehicleType": "car",
+            "duration": "3 Hours"
+        },
+        {
+            "slot": "A14",
+            "vehicle": "-348uti3jiwewjf",
+            "vehicleType": "car",
+            "duration": "1 Hour"
+        }
+    ]
+}

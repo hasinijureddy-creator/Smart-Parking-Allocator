@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Parking | Smart Parking Allocator</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #07101d;
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 76px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 5%;
+
+            background: rgba(5, 12, 25, 0.92);
+            backdrop-filter: blur(20px);
+
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+
+            z-index: 1000;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            color: white;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 13px;
+
+            background: linear-gradient(135deg,#00c6ff,#7c3aed);
+
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .brand-name {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .brand-small {
+            display: block;
+            color: #6ddcff;
+            font-size: 8px;
+            letter-spacing: 3px;
+            margin-top: 2px;
+        }
+
+        .menu {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .menu a {
+            color: #aeb9ca;
+            text-decoration: none;
+
+            padding: 10px 13px;
+            border-radius: 10px;
+
+            font-size: 12px;
+
+            transition: 0.25s;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            color: white;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .menu a.active {
+            box-shadow: inset 0 -2px #00c6ff;
+        }
+
+        .auth {
+            display: flex;
+            gap: 8px;
+        }
+
+        .auth button {
+            padding: 9px 16px;
+            border-radius: 22px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .login {
+            color: white;
+            background: transparent;
+            border: 1px solid #334155;
+        }
+
+        .signup {
+            color: white;
+            border: none;
+            background: linear-gradient(135deg,#00aaff,#7c3aed);
+        }
+
+
+        /* ================= MAIN ================= */
+
+        .parking-container {
+            max-width: 1250px;
+            margin: auto;
+
+            padding: 125px 5% 70px;
+        }
+
+
+        /* ================= HEADER ================= */
+
+        .heading-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+
+            margin-bottom: 32px;
+        }
+
+        .heading-left small {
+            color: #55dfff;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 3px;
+        }
+
+        .heading-left h1 {
+            margin-top: 9px;
+
+            font-size: clamp(38px,5vw,62px);
+            line-height: 1;
+
+            letter-spacing: -2px;
+        }
+
+        .heading-left h1 span {
+            background: linear-gradient(
+                90deg,
+                #00d9ff,
+                #7c5cff,
+                #ff4db8
+            );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .heading-left p {
+            margin-top: 14px;
+
+            max-width: 600px;
+
+            color: #8997aa;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 10px 15px;
+
+            border-radius: 30px;
+
+            color: #49e39b;
+
+            background: rgba(73,227,155,0.08);
+
+            border: 1px solid rgba(73,227,155,0.2);
+
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .green-dot {
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: #49e39b;
+
+            box-shadow: 0 0 12px #49e39b;
+        }
+
+
+        /* ================= STAT CARDS ================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+
+            margin-bottom: 45px;
+        }
+
+        .stat {
+            position: relative;
+
+            padding: 22px;
+
+            min-height: 125px;
+
+            border-radius: 20px;
+
+            background: #0c1728;
+
+            border: 1px solid #1c2a3d;
+
+            overflow: hidden;
+
+            transition: 0.3s;
+        }
+
+        .stat:hover {
+            transform: translateY(-4px);
+            border-color: #31506f;
+        }
+
+        .stat::after {
+            content: "";
+
+            position: absolute;
+
+            width: 90px;
+            height: 90px;
+
+            right: -35px;
+            bottom: -45px;
+
+            border-radius: 50%;
+
+            background: rgba(0,198,255,0.08);
+        }
+
+        .stat-icon {
+            font-size: 20px;
+        }
+
+        .stat-number {
+            display: block;
+
+            margin-top: 12px;
+
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .stat-label {
+            color: #7e8ca2;
+            font-size: 11px;
+        }
+
+        .green {
+            border-top: 3px solid #20d48a;
+        }
+
+        .red {
+            border-top: 3px solid #ff6374;
+        }
+
+        .blue {
+            border-top: 3px solid #2db8ff;
+        }
+
+        .purple {
+            border-top: 3px solid #9b7cff;
+        }
+
+
+        /* ================= ZONES ================= */
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 18px;
+        }
+
+        .section-title h2 {
+            font-size: 22px;
+        }
+
+        .section-title span {
+            color: #708096;
+            font-size: 11px;
+        }
+
+        .zones {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .zone {
+            padding: 23px;
+
+            border-radius: 22px;
+
+            background: linear-gradient(
+                145deg,
+                #101e31,
+                #091422
+            );
+
+            border: 1px solid #203248;
+
+            transition: 0.3s;
+        }
+
+        .zone:hover {
+            transform: translateY(-6px);
+
+            border-color: #277fa8;
+
+            box-shadow:
+                0 18px 50px rgba(0,0,0,0.3);
+        }
+
+        .zone-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .zone-name {
+            color: #61ddff;
+
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .zone h3 {
+            margin-top: 6px;
+            font-size: 18px;
+        }
+
+        .zone-letter {
+            width: 45px;
+            height: 45px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 14px;
+
+            background: linear-gradient(
+                135deg,
+                #00b8e6,
+                #6547e8
+            );
+
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .available {
+            margin-top: 28px;
+
+            font-size: 45px;
+            font-weight: 800;
+
+            color: #43e49a;
+        }
+
+        .available-label {
+            color: #8290a5;
+            font-size: 11px;
+        }
+
+        .bar {
+            height: 7px;
+
+            margin-top: 20px;
+
+            border-radius: 20px;
+
+            background: #1b2939;
+
+            overflow: hidden;
+        }
+
+        .bar span {
+            display: block;
+
+            height: 100%;
+
+            border-radius: 20px;
+
+            background: linear-gradient(
+                90deg,
+                #00c6ff,
+                #7955ff
+            );
+        }
+
+        .zone-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-top: 15px;
+        }
+
+        .occupied {
+            color: #738197;
+            font-size: 10px;
+        }
+
+        .book-button {
+            padding: 8px 13px;
+
+            color: white;
+            background: rgba(0,198,255,0.1);
+
+            border: 1px solid rgba(0,198,255,0.25);
+
+            border-radius: 9px;
+
+            text-decoration: none;
+
+            font-size: 10px;
+            font-weight: 700;
+
+            transition: 0.2s;
+        }
+
+        .book-button:hover {
+            background: #00aee0;
+        }
+
+
+        /* ================= INFO ================= */
+
+        .info {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+
+            gap: 15px;
+
+            margin-top: 45px;
+        }
+
+        .info-card {
+            padding: 22px;
+
+            background: #0b1626;
+
+            border: 1px solid #1a2a3e;
+
+            border-radius: 18px;
+        }
+
+        .info-card .emoji {
+            font-size: 24px;
+        }
+
+        .info-card h3 {
+            margin-top: 12px;
+            font-size: 15px;
+        }
+
+        .info-card p {
+            margin-top: 7px;
+
+            color: #7d8ba0;
+
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            padding: 25px 5%;
+
+            display: flex;
+            justify-content: space-between;
+
+            color: #68778d;
+
+            border-top: 1px solid #172438;
+
+            font-size: 11px;
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1050px) {
+
+            .menu {
+                gap: 0;
+            }
+
+            .menu a {
+                padding: 8px;
+                font-size: 10px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2,1fr);
+            }
+
+            .zones {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .topbar {
+                height: auto;
+                min-height: 70px;
+
+                flex-wrap: wrap;
+
+                padding: 10px 5%;
+            }
+
+            .menu {
+                order: 3;
+
+                width: 100%;
+
+                overflow-x: auto;
+
+                padding-bottom: 5px;
+            }
+
+            .parking-container {
+                padding-top: 145px;
+            }
+
+            .heading-row {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .info {
+                grid-template-columns: 1fr;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="topbar">
+
+    <a href="/" class="brand">
+
+        <div class="brand-icon">P</div>
+
+        <div>
+            <div class="brand-name">
+                Smart Parking
+            </div>
+
+            <span class="brand-small">
+                ALLOCATOR
+            </span>
+        </div>
+
+    </a>
+
+
+    <nav class="menu">
+
+        <a href="/">
+            Home
+        </a>
+
+        <a href="/parking" class="active">
+            Parking
+        </a>
+
+        <a href="/booking">
+            Slot Booking
+        </a>
+
+        <a href="/allocation">
+            Smart Allocation
+        </a>
+
+        <a href="/live">
+            Live Status
+        </a>
+
+        <a href="/prediction">
+            Prediction
+        </a>
+
+        <a href="/about">
+            About
+        </a>
+
+    </nav>
+
+
+    <div class="auth">
+
+        <button class="login">
+            Login
+        </button>
+
+        <button class="signup">
+            Sign Up
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="parking-container">
+
+
+    <!-- HEADER -->
+
+    <section class="heading-row">
+
+        <div class="heading-left">
+
+            <small>
+                GRAND CITY MALL • PARKING CONTROL
+            </small>
+
+            <h1>
+                Parking
+                <span>Overview</span>
+            </h1>
+
+            <p>
+                See available parking capacity across the mall
+                and quickly move to the zone that suits you.
+            </p>
+
+        </div>
+
+
+        <div class="system-status">
+
+            <span class="green-dot"></span>
+
+            SYSTEM ONLINE
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= STATISTICS ================= -->
+
+    <section class="stats">
+
+
+        <div class="stat green">
+
+            <span class="stat-icon">🟢</span>
+
+            <strong class="stat-number">
+                24
+            </strong>
+
+            <span class="stat-label">
+                Available Slots
+            </span>
+
+        </div>
+
+
+        <div class="stat red">
+
+            <span class="stat-icon">🔴</span>
+
+            <strong class="stat-number">
+                16
+            </strong>
+
+            <span class="stat-label">
+                Occupied Slots
+            </span>
+
+        </div>
+
+
+        <div class="stat blue">
+
+            <span class="stat-icon">🔵</span>
+
+            <strong class="stat-number">
+                8
+            </strong>
+
+            <span class="stat-label">
+                Reserved / Booked
+            </span>
+
+        </div>
+
+
+        <div class="stat purple">
+
+            <span class="stat-icon">🅿️</span>
+
+            <strong class="stat-number">
+                48
+            </strong>
+
+            <span class="stat-label">
+                Total Parking Capacity
+            </span>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- ================= ZONES ================= -->
+
+    <div class="section-title">
+
+        <h2>
+            Parking Zones
+        </h2>
+
+        <span>
+            3 zones • Live availability
+        </span>
+
+    </div>
+
+
+    <section class="zones">
+
+
+        <!-- ZONE A -->
+
+        <div class="zone">
+
+            <div class="zone-head">
+
+                <div>
+
+                    <div class="zone-name">
+                        ZONE A
+                    </div>
+
+                    <h3>
+                        Main Entrance
+                    </h3>
+
+                </div>
+
+                <div class="zone-letter">
+                    A
+                </div>
+
+            </div>
+
+
+            <div class="available">
+                10
+            </div>
+
+            <div class="available-label">
+                parking slots available
+            </div>
+
+
+            <div class="bar">
+                <span style="width:64%"></span>
+            </div>
+
+
+            <div class="zone-bottom">
+
+                <span class="occupied">
+                    18 occupied
+                </span>
+
+                <a href="/booking" class="book-button">
+                    BOOK SLOT →
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- ZONE B -->
+
+        <div class="zone">
+
+            <div class="zone-head">
+
+                <div>
+
+                    <div class="zone-name">
+                        ZONE B
+                    </div>
+
+                    <h3>
+                        Food Court
+                    </h3>
+
+                </div>
+
+                <div class="zone-letter">
+                    B
+                </div>
+
+            </div>
+
+
+            <div class="available">
+                8
+            </div>
+
+            <div class="available-label">
+                parking slots available
+            </div>
+
+
+            <div class="bar">
+                <span style="width:60%"></span>
+            </div>
+
+
+            <div class="zone-bottom">
+
+                <span class="occupied">
+                    12 occupied
+                </span>
+
+                <a href="/booking" class="book-button">
+                    BOOK SLOT →
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- ZONE C -->
+
+        <div class="zone">
+
+            <div class="zone-head">
+
+                <div>
+
+                    <div class="zone-name">
+                        ZONE C
+                    </div>
+
+                    <h3>
+                        Premium Parking
+                    </h3>
+
+                </div>
+
+                <div class="zone-letter">
+                    C
+                </div>
+
+            </div>
+
+
+            <div class="available">
+                6
+            </div>
+
+            <div class="available-label">
+                parking slots available
+            </div>
+
+
+            <div class="bar">
+                <span style="width:45%"></span>
+            </div>
+
+
+            <div class="zone-bottom">
+
+                <span class="occupied">
+                    6 occupied
+                </span>
+
+                <a href="/booking" class="book-button">
+                    BOOK SLOT →
+                </a>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- ================= INFO ================= -->
+
+    <section class="info">
+
+
+        <div class="info-card">
+
+            <div class="emoji">
+                ⚡
+            </div>
+
+            <h3>
+                Smart Availability
+            </h3>
+
+            <p>
+                Quickly identify zones with free spaces
+                before entering the parking area.
+            </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <div class="emoji">
+                📍
+            </div>
+
+            <h3>
+                Zone Guidance
+            </h3>
+
+            <p>
+                Choose a suitable parking zone and continue
+                directly to slot booking.
+            </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <div class="emoji">
+                🔄
+            </div>
+
+            <h3>
+                Live Monitoring
+            </h3>
+
+            <p>
+                Track available, occupied and reserved
+                spaces from one dashboard.
+            </p>
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+<footer>
+
+    <strong>
+        Smart Parking Allocator
+    </strong>
+
+    <span>
+        Grand City Mall • Intelligent Parking System
+    </span>
+
+</footer>
+
+
+</body>
+</html>

@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Live Parking Status</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#040812;
+    color:white;
+    min-height:100vh;
+}
+
+header{
+    height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
+    background:#081321;
+    border-bottom:1px solid #1d334c;
+}
+
+.logo{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#00d9ff;
+}
+
+nav{
+    display:flex;
+    gap:20px;
+}
+
+nav a{
+    color:#9baabd;
+    text-decoration:none;
+    font-size:13px;
+}
+
+nav a:hover{
+    color:white;
+}
+
+main{
+    width:94%;
+    max-width:1400px;
+    margin:35px auto;
+}
+
+.title{
+    margin-bottom:28px;
+}
+
+.title small{
+    color:#00d9ff;
+    letter-spacing:3px;
+}
+
+.title h1{
+    font-size:44px;
+    margin-top:8px;
+}
+
+.title h1 span{
+    color:#8b63ff;
+}
+
+.title p{
+    color:#8291a5;
+    margin-top:8px;
+}
+
+.live-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:15px;
+    padding:8px 14px;
+    border-radius:20px;
+    background:rgba(54,229,154,.08);
+    border:1px solid rgba(54,229,154,.3);
+    color:#36e59a;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.live-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#36e59a;
+    box-shadow:0 0 12px #36e59a;
+    animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+
+0%,100%{
+opacity:1;
+transform:scale(1);
+}
+
+50%{
+opacity:.4;
+transform:scale(.7);
+}
+
+}
+
+.dashboard{
+    display:grid;
+    grid-template-columns:1.4fr .8fr;
+    gap:20px;
+}
+
+.overview{
+    background:linear-gradient(145deg,#0d1a2b,#07101c);
+    border:1px solid #20364d;
+    border-radius:24px;
+    padding:25px;
+}
+
+.overview-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.overview-top h2{
+    font-size:20px;
+}
+
+.refresh{
+    padding:9px 14px;
+    border-radius:10px;
+    background:#07111d;
+    border:1px solid #29415b;
+    color:#8fa0b3;
+    cursor:pointer;
+}
+
+.refresh:hover{
+    color:white;
+    border-color:#00d9ff;
+}
+
+.occupancy{
+    display:flex;
+    align-items:center;
+    gap:35px;
+}
+
+.circle{
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:
+    conic-gradient(
+        #36e59a 0deg,
+        #36e59a 180deg,
+        #ff6475 180deg,
+        #ff6475 240deg,
+        #48b7ff 240deg,
+        #48b7ff 300deg,
+        #142336 300deg
+    );
+    position:relative;
+}
+
+.circle::before{
+    content:"";
+    position:absolute;
+    width:135px;
+    height:135px;
+    border-radius:50%;
+    background:#091522;
+}
+
+.circle-content{
+    position:relative;
+    text-align:center;
+}
+
+.circle-content strong{
+    display:block;
+    font-size:32px;
+}
+
+.circle-content span{
+    color:#8191a5;
+    font-size:11px;
+}
+
+.quick-stats{
+    flex:1;
+    display:grid;
+    gap:14px;
+}
+
+.quick{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:15px;
+    border-radius:13px;
+    background:#07111d;
+    border:1px solid #1d3349;
+}
+
+.quick-left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.color-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+}
+
+.green{
+    background:#36e59a;
+    box-shadow:0 0 10px rgba(54,229,154,.5);
+}
+
+.red{
+    background:#ff6475;
+    box-shadow:0 0 10px rgba(255,100,117,.5);
+}
+
+.blue{
+    background:#48b7ff;
+    box-shadow:0 0 10px rgba(72,183,255,.5);
+}
+
+.quick small{
+    color:#8291a5;
+}
+
+.quick strong{
+    font-size:20px;
+}
+
+.zone-card{
+    background:#0b1726;
+    border:1px solid #20364d;
+    border-radius:24px;
+    padding:25px;
+}
+
+.zone-card h2{
+    margin-bottom:20px;
+}
+
+.zone-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:16px;
+    margin-bottom:12px;
+    background:#07111d;
+    border:1px solid #1d3349;
+    border-radius:14px;
+}
+
+.zone-name{
+    font-weight:bold;
+}
+
+.zone-status{
+    text-align:right;
+}
+
+.zone-status strong{
+    display:block;
+    color:#36e59a;
+}
+
+.zone-status small{
+    color:#74869b;
+}
+
+.map-card{
+    margin-top:20px;
+    background:#0b1726;
+    border:1px solid #20364d;
+    border-radius:24px;
+    padding:25px;
+}
+
+.map-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:20px;
+}
+
+.map-header h2{
+    font-size:20px;
+}
+
+.zones{
+    display:flex;
+    gap:10px;
+}
+
+.zone-button{
+    padding:10px 18px;
+    border-radius:10px;
+    border:1px solid #29415b;
+    background:#07111d;
+    color:#9baabd;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.zone-button:hover{
+    border-color:#00d9ff;
+    color:white;
+}
+
+.zone-button.active{
+    background:linear-gradient(135deg,#00aeda,#704cff);
+    color:white;
+    border-color:transparent;
+}
+
+.legend{
+    display:flex;
+    gap:20px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+}
+
+.legend-item{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    color:#8999ac;
+    font-size:12px;
+}
+
+.legend-box{
+    width:12px;
+    height:12px;
+    border-radius:3px;
+}
+
+.legend-available{
+    background:#36e59a;
+}
+
+.legend-occupied{
+    background:#ff6475;
+}
+
+.legend-booked{
+    background:#48b7ff;
+}
+
+.slot-grid{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:12px;
+}
+
+.slot{
+    min-height:72px;
+    border-radius:13px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    transition:.2s;
+}
+
+.slot strong{
+    font-size:16px;
+}
+
+.slot small{
+    font-size:9px;
+    letter-spacing:1px;
+}
+
+.slot.available{
+    background:rgba(54,229,154,.08);
+    border:1px solid #27d98e;
+    color:#36e59a;
+}
+
+.slot.occupied{
+    background:rgba(255,100,117,.08);
+    border:1px solid #71323d;
+    color:#ff6475;
+}
+
+.slot.booked{
+    background:rgba(72,183,255,.08);
+    border:1px solid #285b80;
+    color:#48b7ff;
+    box-shadow:0 0 15px rgba(72,183,255,.08);
+}
+
+@media(max-width:1000px){
+
+.dashboard{
+grid-template-columns:1fr;
+}
+
+}
+
+@media(max-width:750px){
+
+nav{
+display:none;
+}
+
+.occupancy{
+flex-direction:column;
+}
+
+.slot-grid{
+grid-template-columns:repeat(4,1fr);
+}
+
+}
+
+@media(max-width:500px){
+
+main{
+width:92%;
+}
+
+.title h1{
+font-size:32px;
+}
+
+.slot-grid{
+grid-template-columns:repeat(3,1fr);
+}
+
+.slot{
+min-height:65px;
+}
+
+.map-header{
+flex-direction:column;
+align-items:flex-start;
+gap:15px;
+}
+
+.zones{
+width:100%;
+}
+
+.zone-button{
+flex:1;
+}
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<header>
+
+<div class="logo">
+🚗 Smart <span>Parking</span>
+</div>
+
+<nav>
+
+<a href="/">Home</a>
+<a href="/parking">Parking</a>
+<a href="/booking">Booking</a>
+<a href="/allocation">Allocation</a>
+<a href="/status">Live Status</a>
+<a href="/about">About</a>
+
+</nav>
+
+</header>
+
+
+<main>
+
+<div class="title">
+
+<small>SMART PARKING MONITOR</small>
+
+<h1>
+Live Parking
+<span>Status</span>
+</h1>
+
+<p>
+Monitor the current parking situation across all zones.
+</p>
+
+<div class="live-badge">
+
+<span class="live-dot"></span>
+
+LIVE SYSTEM
+
+</div>
+
+</div>
+
+
+<div class="dashboard">
+
+
+<section class="overview">
+
+<div class="overview-top">
+
+<h2>
+📊 Parking Overview
+</h2>
+
+<button
+class="refresh"
+id="refreshButton"
+onclick="refreshStatus()">
+↻ Refresh
+</button>
+
+</div>
+
+
+<div class="occupancy">
+
+
+<div class="circle">
+
+<div class="circle-content">
+
+<strong id="percentage">
+0%
+</strong>
+
+<span>
+OCCUPANCY
+</span>
+
+</div>
+
+</div>
+
+
+<div class="quick-stats">
+
+
+<div class="quick">
+
+<div class="quick-left">
+
+<span class="color-dot green"></span>
+
+<small>
+AVAILABLE
+</small>
+
+</div>
+
+<strong
+id="availableCount"
+style="color:#36e59a;">
+0
+</strong>
+
+</div>
+
+
+<div class="quick">
+
+<div class="quick-left">
+
+<span class="color-dot red"></span>
+
+<small>
+OCCUPIED
+</small>
+
+</div>
+
+<strong
+id="occupiedCount"
+style="color:#ff6475;">
+0
+</strong>
+
+</div>
+
+
+<div class="quick">
+
+<div class="quick-left">
+
+<span class="color-dot blue"></span>
+
+<small>
+BOOKED
+</small>
+
+</div>
+
+<strong
+id="bookedCount"
+style="color:#48b7ff;">
+0
+</strong>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="zone-card">
+
+<h2>
+🏢 Zone Status
+</h2>
+
+
+<div class="zone-row">
+
+<span class="zone-name">
+ZONE A
+</span>
+
+<div class="zone-status">
+
+<strong id="zoneAStatus">
+ACTIVE
+</strong>
+
+<small id="zoneADetail">
+Loading...
+</small>
+
+</div>
+
+</div>
+
+
+<div class="zone-row">
+
+<span class="zone-name">
+ZONE B
+</span>
+
+<div class="zone-status">
+
+<strong id="zoneBStatus">
+ACTIVE
+</strong>
+
+<small id="zoneBDetail">
+Loading...
+</small>
+
+</div>
+
+</div>
+
+
+<div class="zone-row">
+
+<span class="zone-name">
+ZONE C
+</span>
+
+<div class="zone-status">
+
+<strong id="zoneCStatus">
+ACTIVE
+</strong>
+
+<small id="zoneCDetail">
+Loading...
+</small>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+
+<section class="map-card">
+
+<div class="map-header">
+
+<h2>
+🅿️ Live Parking Map
+</h2>
+
+
+<div class="zones">
+
+<button
+class="zone-button active"
+data-zone="A"
+type="button">
+ZONE A
+</button>
+
+<button
+class="zone-button"
+data-zone="B"
+type="button">
+ZONE B
+</button>
+
+<button
+class="zone-button"
+data-zone="C"
+type="button">
+ZONE C
+</button>
+
+</div>
+
+</div>
+
+
+<div class="legend">
+
+<div class="legend-item">
+
+<span class="legend-box legend-available"></span>
+
+Available
+
+</div>
+
+
+<div class="legend-item">
+
+<span class="legend-box legend-occupied"></span>
+
+Occupied
+
+</div>
+
+
+<div class="legend-item">
+
+<span class="legend-box legend-booked"></span>
+
+Booked
+
+</div>
+
+</div>
+
+
+<div
+class="slot-grid"
+id="slotGrid">
+</div>
+
+</section>
+
+</main>
+
+
+<script>
+
+let allBookings = [];
+
+let currentZone = "A";
+
+
+/* =====================================================
+   FIXED DEMO OCCUPIED SLOTS
+===================================================== */
+
+function isOccupied(index){
+
+return index === 0 ||
+index === 9 ||
+index === 18 ||
+index === 27;
+
+}
+
+
+/* =====================================================
+   GET BOOKINGS FROM FLASK
+===================================================== */
+
+async function loadLiveData(){
+
+try{
+
+const response =
+await fetch(
+"/api/bookings",
+{
+cache:"no-store"
+}
+);
+
+const data =
+await response.json();
+
+
+if(!data.success){
+
+throw new Error(
+"Could not load bookings"
+);
+
+}
+
+
+allBookings =
+data.bookings || [];
+
+
+renderZone(currentZone);
+
+updateOverview();
+
+
+}catch(error){
+
+console.log(
+"LIVE DATA ERROR:",
+error
+);
+
+}
+
+}
+
+
+/* =====================================================
+   CHECK BOOKED
+===================================================== */
+
+function isBooked(slotNumber){
+
+return allBookings.some(
+function(item){
+
+return item.slot === slotNumber;
+
+}
+);
+
+}
+
+
+/* =====================================================
+   CREATE SLOTS
+===================================================== */
+
+function getSlots(zone){
+
+const slots = [];
+
+for(
+let i = 1;
+i <= 30;
+i++
+){
+
+slots.push(
+zone +
+String(i).padStart(2,"0")
+);
+
+}
+
+return slots;
+
+}
+
+
+/* =====================================================
+   RENDER SELECTED ZONE
+===================================================== */
+
+function renderZone(zone){
+
+currentZone = zone;
+
+
+const slotGrid =
+document.getElementById("slotGrid");
+
+slotGrid.innerHTML = "";
+
+
+const slots =
+getSlots(zone);
+
+
+slots.forEach(
+function(slotNumber,index){
+
+const slot =
+document.createElement("div");
+
+slot.className = "slot";
+
+
+/* BOOKED FROM REAL BACKEND */
+
+if(isBooked(slotNumber)){
+
+slot.classList.add("booked");
+
+slot.innerHTML =
+"<strong>" +
+slotNumber +
+"</strong>" +
+"<small>BOOKED</small>";
+
+}
+
+
+/* FIXED OCCUPIED */
+
+else if(isOccupied(index)){
+
+slot.classList.add("occupied");
+
+slot.innerHTML =
+"<strong>" +
+slotNumber +
+"</strong>" +
+"<small>OCCUPIED</small>";
+
+}
+
+
+/* AVAILABLE */
+
+else{
+
+slot.classList.add("available");
+
+slot.innerHTML =
+"<strong>" +
+slotNumber +
+"</strong>" +
+"<small>AVAILABLE</small>";
+
+}
+
+
+slotGrid.appendChild(slot);
+
+}
+);
+
+
+/* ACTIVE BUTTON */
+
+document
+.querySelectorAll(".zone-button")
+.forEach(
+function(button){
+
+button.classList.toggle(
+"active",
+button.dataset.zone === zone
+);
+
+}
+);
+
+}
+
+
+/* =====================================================
+   UPDATE OVERVIEW
+===================================================== */
+
+function updateOverview(){
+
+let totalAvailable = 0;
+
+let totalOccupied = 0;
+
+let totalBooked = 0;
+
+
+/* Count each zone */
+
+["A","B","C"].forEach(
+function(zone){
+
+const slots =
+getSlots(zone);
+
+
+slots.forEach(
+function(slotNumber,index){
+
+if(isBooked(slotNumber)){
+
+totalBooked++;
+
+}
+
+else if(isOccupied(index)){
+
+totalOccupied++;
+
+}
+
+else{
+
+totalAvailable++;
+
+}
+
+}
+
+);
+
+}
+);
+
+
+/* COUNTERS */
+
+document.getElementById(
+"availableCount"
+).textContent =
+totalAvailable;
+
+
+document.getElementById(
+"occupiedCount"
+).textContent =
+totalOccupied;
+
+
+document.getElementById(
+"bookedCount"
+).textContent =
+totalBooked;
+
+
+/* OCCUPANCY */
+
+const total =
+totalAvailable +
+totalOccupied +
+totalBooked;
+
+
+const occupied =
+totalOccupied +
+totalBooked;
+
+
+const percent =
+total === 0
+? 0
+: Math.round(
+(occupied / total) * 100
+);
+
+
+document.getElementById(
+"percentage"
+).textContent =
+percent + "%";
+
+
+/* ZONE DETAILS */
+
+updateZoneDetails(
+"A",
+"zoneADetail"
+);
+
+updateZoneDetails(
+"B",
+"zoneBDetail"
+);
+
+updateZoneDetails(
+"C",
+"zoneCDetail"
+);
+
+}
+
+
+/* =====================================================
+   ZONE DETAILS
+===================================================== */
+
+function updateZoneDetails(
+zone,
+elementId
+){
+
+const slots =
+getSlots(zone);
+
+
+let available = 0;
+
+let booked = 0;
+
+let occupied = 0;
+
+
+slots.forEach(
+function(slotNumber,index){
+
+if(isBooked(slotNumber)){
+
+booked++;
+
+}
+
+else if(isOccupied(index)){
+
+occupied++;
+
+}
+
+else{
+
+available++;
+
+}
+
+}
+);
+
+
+document.getElementById(
+elementId
+).textContent =
+available +
+" / 30 available";
+
+}
+
+
+/* =====================================================
+   ZONE BUTTONS
+===================================================== */
+
+document
+.querySelectorAll(".zone-button")
+.forEach(
+function(button){
+
+button.addEventListener(
+"click",
+function(){
+
+renderZone(
+this.dataset.zone
+);
+
+}
+);
+
+}
+);
+
+
+/* =====================================================
+   REFRESH
+===================================================== */
+
+async function refreshStatus(){
+
+const button =
+document.getElementById(
+"refreshButton"
+);
+
+button.textContent =
+"↻ Updating...";
+
+button.disabled = true;
+
+
+await loadLiveData();
+
+
+button.textContent =
+"✓ Updated";
+
+
+setTimeout(
+function(){
+
+button.textContent =
+"↻ Refresh";
+
+button.disabled = false;
+
+},
+1000
+);
+
+}
+
+
+/* =====================================================
+   AUTO LIVE UPDATE
+===================================================== */
+
+/*
+   Check the server every 2 seconds.
+   So if you book a slot in another tab,
+   Live Status will automatically update.
+*/
+
+setInterval(
+function(){
+
+loadLiveData();
+
+},
+2000
+);
+
+
+/* =====================================================
+   FIRST LOAD
+===================================================== */
+
+loadLiveData();
+
+</script>
+
+</body>
+
+</html>
